@@ -1,7 +1,6 @@
 package com.mygdx.game.Sprite;
 
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.mygdx.game.Base.ScaledTouchUpButton;
 import com.mygdx.game.Math.Rect;
