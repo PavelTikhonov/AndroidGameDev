@@ -9,8 +9,9 @@ import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.Base.BaseScreen;
 import com.mygdx.game.Math.Rect;
 import com.mygdx.game.Sprite.Background;
+import com.mygdx.game.Sprite.MainShip;
 import com.mygdx.game.Sprite.Star;
-import com.mygdx.game.Sprite.Starship;
+import com.mygdx.game.pool.BulletPool;
 
 public class GameScreen extends BaseScreen {
 
@@ -20,7 +21,10 @@ public class GameScreen extends BaseScreen {
     private Background background;
     private TextureAtlas atlas;
     private Star[] starArray;
-    private Starship starship;
+
+    private MainShip mainShip;
+
+    private BulletPool bulletPool;
 
     @Override
     public void show() {
@@ -32,12 +36,14 @@ public class GameScreen extends BaseScreen {
         for (int i = 0; i < STAR_COUNT; i++) {
             starArray[i] = new Star(atlas);
         }
-        starship = new Starship(atlas);
+        bulletPool = new BulletPool();
+        mainShip = new MainShip(atlas, bulletPool);
     }
 
     @Override
     public void render(float delta) {
         update(delta);
+        freeAllDestroyedActiveObjects();
         draw();
     }
 
@@ -45,7 +51,12 @@ public class GameScreen extends BaseScreen {
         for (Star star : starArray) {
             star.update(delta);
         }
-        starship.update(delta);
+        mainShip.update(delta);
+        bulletPool.updateActiveSprites(delta);
+    }
+
+    private void freeAllDestroyedActiveObjects() {
+        bulletPool.freeAllDestroyedActiveSprites();
     }
 
     private void draw() {
@@ -56,7 +67,8 @@ public class GameScreen extends BaseScreen {
         for (Star star : starArray) {
             star.draw(batch);
         }
-        starship.draw(batch);
+        mainShip.draw(batch);
+        bulletPool.drawActiveSprites(batch);
         batch.end();
     }
 
@@ -67,34 +79,38 @@ public class GameScreen extends BaseScreen {
         for (Star star : starArray) {
             star.resize(worldBounds);
         }
-        starship.resize(worldBounds);
+        mainShip.resize(worldBounds);
     }
 
     @Override
     public void dispose() {
         bg.dispose();
         atlas.dispose();
+        bulletPool.dispose();
         super.dispose();
     }
 
     @Override
     public boolean keyDown(int keycode) {
-        return super.keyDown(keycode);
+        mainShip.keyDown(keycode);
+        return false;
     }
 
     @Override
     public boolean keyUp(int keycode) {
-        return super.keyUp(keycode);
+        mainShip.keyUp(keycode);
+        return false;
     }
 
     @Override
     public boolean touchDown(Vector2 touch, int pointer) {
-        starship.touchDown(touch, pointer);
+        mainShip.touchDown(touch, pointer);
         return false;
     }
 
     @Override
     public boolean touchUp(Vector2 touch, int pointer) {
-        return super.touchUp(touch, pointer);
+        mainShip.touchUp(touch, pointer);
+        return false;
     }
 }
