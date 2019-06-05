@@ -6,10 +6,12 @@ import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.Base.Sprite;
 import com.mygdx.game.Math.Rect;
 import com.mygdx.game.pool.BulletPool;
+import com.mygdx.game.pool.ExplosionPool;
 
 public abstract class Ship extends Sprite {
 
     protected BulletPool bulletPool;
+    protected ExplosionPool explosionPool;
     protected TextureRegion bulletRegion;
 
     protected Vector2 v;
@@ -27,6 +29,9 @@ public abstract class Ship extends Sprite {
 
     protected Sound bulletSound;
 
+    private float damageAnimateInterval = 0.1f;
+    private float damageAnimateTimer = damageAnimateInterval;
+
     public Ship(TextureRegion region, int rows, int cols, int frames) {
         super(region, rows, cols, frames);
     }
@@ -37,15 +42,10 @@ public abstract class Ship extends Sprite {
     @Override
     public void update(float delta) {
         super.update(delta);
-        if(this.pos.y + this.getHalfHeight() <= worldBounds.getHalfHeight()){
-            pos.mulAdd(v, delta);
-        } else {
-            pos.mulAdd(v0, delta);
-        }
-        reloadTimer += delta;
-        if (reloadTimer >= reloadInterval) {
-            reloadTimer = 0f;
-            shoot();
+        pos.mulAdd(v, delta);
+        damageAnimateTimer += delta;
+        if (damageAnimateTimer >= damageAnimateInterval) {
+            frame = 0;
         }
     }
 
@@ -55,9 +55,29 @@ public abstract class Ship extends Sprite {
         this.worldBounds = worldBounds;
     }
 
-    private void shoot() {
+    @Override
+    public void destroy() {
+        super.destroy();
+        boom();
+    }
+
+    public void damage(int damage) {
+        hp -= damage;
+        if (hp <= 0) {
+            destroy();
+        }
+        frame = 1;
+        damageAnimateTimer = 0f;
+    }
+
+    protected void shoot() {
         bulletSound.play();
         Bullet bullet = bulletPool.obtain();
         bullet.set(this, bulletRegion, pos, bulletV, bulletHeight, worldBounds, damage);
+    }
+
+    private void boom() {
+        Explosion explosion = explosionPool.obtain();
+        explosion.set(getHeight(), pos);
     }
 }

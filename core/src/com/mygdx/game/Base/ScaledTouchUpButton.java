@@ -2,6 +2,7 @@ package com.mygdx.game.Base;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.mygdx.game.Screen.GameScreen;
 
 public abstract class ScaledTouchUpButton extends Sprite {
 
@@ -39,4 +40,5 @@ public abstract class ScaledTouchUpButton extends Sprite {
     }
 
     public abstract void action();
+
 }
