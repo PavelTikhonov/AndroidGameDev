@@ -2,7 +2,6 @@ package com.mygdx.game.Screen;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -18,15 +17,16 @@ import com.mygdx.game.Sprite.Star;
 public class MenuScreen extends BaseScreen {
 
     private static final int STAR_COUNT = 256;
+
+    private Game game;
+
     private Texture bg;
     private Background background;
     private TextureAtlas atlas;
     private Star[] starArray;
 
-    private Game game;
     private ButtonExit buttonExit;
     private ButtonPlay buttonPlay;
-    private Music music;
 
     public MenuScreen(Game game) {
         this.game = game;
@@ -44,7 +44,6 @@ public class MenuScreen extends BaseScreen {
         }
         buttonExit = new ButtonExit(atlas);
         buttonPlay = new ButtonPlay(atlas, game);
-        music = Gdx.audio.newMusic(Gdx.files.internal("sounds/music.mp3"));
     }
 
     @Override
@@ -54,20 +53,19 @@ public class MenuScreen extends BaseScreen {
         draw();
     }
 
-    private void update(float delta){
-        for (Star s: starArray) {
-            s.update(delta);
+    private void update(float delta) {
+        for (Star star : starArray) {
+            star.update(delta);
         }
-        music.play();
     }
 
-    private void draw(){
+    private void draw() {
         Gdx.gl.glClearColor(0.4f, 0.3f, 0.9f, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         batch.begin();
         background.draw(batch);
-        for (Star s: starArray) {
-            s.draw(batch);
+        for (Star star : starArray) {
+            star.draw(batch);
         }
         buttonExit.draw(batch);
         buttonPlay.draw(batch);
@@ -78,7 +76,6 @@ public class MenuScreen extends BaseScreen {
     public void dispose() {
         bg.dispose();
         atlas.dispose();
-        music.dispose();
         super.dispose();
     }
 
@@ -86,15 +83,15 @@ public class MenuScreen extends BaseScreen {
     public void resize(Rect worldBounds) {
         super.resize(worldBounds);
         background.resize(worldBounds);
-        for (Star s: starArray) {
-            s.resize(worldBounds);
+        for (Star star : starArray) {
+            star.resize(worldBounds);
         }
         buttonExit.resize(worldBounds);
         buttonPlay.resize(worldBounds);
     }
 
     @Override
-    public boolean touchDown(Vector2 touch, int pointer){
+    public boolean touchDown(Vector2 touch, int pointer) {
         buttonExit.touchDown(touch, pointer);
         buttonPlay.touchDown(touch, pointer);
         return false;
