@@ -31,8 +31,6 @@ public class EnemyGenerator {
     private static final float ENEMY_BIG_RELOAD_INTERVAL = 1f;
     private static final int ENEMY_BIG_HP = 10;
 
-
-
     private Rect worldBounds;
 
     private float generateInterval = 4f;
@@ -45,8 +43,6 @@ public class EnemyGenerator {
     private final Vector2 enemySmallV = new Vector2(0f, -0.2f);
     private final Vector2 enemyMediumV = new Vector2(0f, -0.03f);
     private final Vector2 enemyBigV = new Vector2(0f, -0.005f);
-    private final Vector2 enemyStartV = new Vector2(0f, -0.5f);
-
 
     private TextureRegion bulletRegion;
 
@@ -70,10 +66,9 @@ public class EnemyGenerator {
             generateTimer = 0f;
             Enemy enemy = enemyPool.obtain();
             float type = (float) Math.random();
-            if (type < 0.5f) {
+            if (type < 0.6f) {
                 enemy.set(
                         enemySmallRegion,
-                        enemyStartV,
                         enemySmallV,
                         bulletRegion,
                         ENEMY_SMALL_BULLET_HEIGHT,
@@ -83,10 +78,9 @@ public class EnemyGenerator {
                         ENEMY_SMALL_HEIGHT,
                         ENEMY_SMALL_HP
                 );
-            } else if (type < 0.8f) {
+            } else if (type < 0.85f) {
                 enemy.set(
                         enemyMediumRegion,
-                        enemyStartV,
                         enemyMediumV,
                         bulletRegion,
                         ENEMY_MEDIUM_BULLET_HEIGHT,
@@ -99,7 +93,6 @@ public class EnemyGenerator {
             } else {
                 enemy.set(
                         enemyBigRegion,
-                        enemyStartV,
                         enemyBigV,
                         bulletRegion,
                         ENEMY_BIG_BULLET_HEIGHT,
