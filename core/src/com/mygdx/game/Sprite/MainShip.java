@@ -10,6 +10,7 @@ import com.mygdx.game.pool.ExplosionPool;
 
 public class MainShip extends Ship {
 
+    private static final int HP = 100;
     private static final int INVALID_POINTER = -1;
 
     private boolean pressedLeft;
@@ -30,17 +31,23 @@ public class MainShip extends Ship {
         this.bulletHeight = 0.01f;
         this.damage = 1;
         this.bulletSound = bulletSound;
-        this.hp = 10;
+        this.hp = HP;
     }
 
     public void setDefault(){
         v.set(0.0f, 0.0f);
-        this.hp = 10;
+        this.hp = HP;
         setLeft(-this.getHalfWidth());
         setBottom(-worldBounds.getHalfHeight() + 0.05f);
         this.flushDestroy();
         this.pressedLeft = false;
         this.pressedRight = false;
+        leftPointer = INVALID_POINTER;
+        rightPointer = INVALID_POINTER;
+    }
+
+    public static int getMaxHP() {
+        return HP;
     }
 
     @Override

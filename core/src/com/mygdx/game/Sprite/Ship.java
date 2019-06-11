@@ -80,4 +80,12 @@ public abstract class Ship extends Sprite {
         Explosion explosion = explosionPool.obtain();
         explosion.set(getHeight(), pos);
     }
+
+    public void setHp(int hp) {
+        this.hp = hp;
+    }
+
+    public int getHp() {
+        return hp;
+    }
 }
